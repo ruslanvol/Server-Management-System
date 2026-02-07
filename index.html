@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Add Product</h2>
+        
+        <label>Name:</label>
+        <input type="text" id="p_name" placeholder="Product name">
+
+        <label>Price:</label>
+        <input type="number" id="p_price" placeholder="0">
+
+        <label>Category:</label>
+        <select id="p_cat">
+            <option value="Drinks">Drinks</option>
+            <option value="Meat">Meat</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Basic">Basic</option>
+        </select>
+
+        <label>Image Link:</label>
+        <input type="text" id="p_img" placeholder="http://...">
+
+        <button onclick="addItem()">Add Product</button>
+    </div>
+
+    <div id="cart-area">
+        <h2>My Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="list">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let products = [];
+
+        function addItem() {
+            let name = document.getElementById("p_name").value;
+            let price = document.getElementById("p_price").value;
+            let category = document.getElementById("p_cat").value;
+            let image = document.getElementById("p_img").value;
+
+            if(name == "" || price == "") {
+                alert("Name and Price are required!");
+                return;
+            }
+
+            if(image == "") {
+                image = "https://via.placeholder.com/50";
+            }
+
+            let obj = {
+                n: name,
+                p: price,
+                c: category,
+                i: image
+            };
+
+            products.push(obj);
+            showTable();
+            cleanForm();
+        }
+
+        function showTable() {
+            let tableBody = document.getElementById("list");
+            let str = ""; 
+
+            for(let i = 0; i < products.length; i++) {
+                str += "<tr>";
+                str += "<td>" + products[i].n + "</td>";
+                str += "<td>" + products[i].p + " ₪</td>";
+                str += "<td>" + products[i].c + "</td>";
+                str += "<td><img src='" + products[i].i + "'></td>";
+                str += "<td><button class='del-btn' onclick='deleteItem(" + i + ")'>Delete</button></td>";
+                str += "</tr>";
+            }
+
+            tableBody.innerHTML = str;
+        }
+
+        function deleteItem(index) {
+            products.splice(index, 1);
+            showTable();
+        }
+
+        function cleanForm() {
+            document.getElementById("p_name").value = "";
+            document.getElementById("p_price").value = "";
+            document.getElementById("p_img").value = "";
+            document.getElementById("p_cat").value = "Drinks"; 
+        }
+    </script>
+
+</body>
+</html>
